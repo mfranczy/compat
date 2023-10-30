@@ -2,14 +2,14 @@ package linux
 
 import (
 	"github.com/mfranczy/compat/pkg/scanner"
-	"github.com/mfranczy/compat/pkg/types/v1/linux"
 )
 
-const KernelModulesScanner = linux.KernelModulesSchemaName
+const KernelModulesScanner = "kernelModules"
 
 type KernelModules struct {
 	id    string
 	group string
+	input interface{}
 }
 
 func (d *KernelModules) Name() string {
@@ -24,15 +24,20 @@ func (d *KernelModules) Group() string {
 	return d.group
 }
 
-func (d *KernelModules) Run(i interface{}) error {
+func (d *KernelModules) Input() interface{} {
+	return d.input
+}
+
+func (d *KernelModules) Run() error {
 	return nil
 }
 
-func NewKernelModules(id string, group string) scanner.Scanner {
+func NewKernelModules(id string, group string, input interface{}) (scanner.Scanner, error) {
 	return &KernelModules{
 		id:    id,
 		group: group,
-	}
+		input: input,
+	}, nil
 }
 
 func init() {

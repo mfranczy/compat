@@ -25,7 +25,7 @@ func main() {
 	switch cmd {
 	case validate.CmdName:
 		if err := validate.Run(cmdArgs); err != nil {
-			log.Fatal(validate.CmdName, err)
+			log.Fatalf("%s command error: %s", validate.CmdName, err)
 		}
 	default:
 		log.Fatalf("Unknown command '%s'", cmd)

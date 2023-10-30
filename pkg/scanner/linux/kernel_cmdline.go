@@ -2,14 +2,14 @@ package linux
 
 import (
 	"github.com/mfranczy/compat/pkg/scanner"
-	"github.com/mfranczy/compat/pkg/types/v1/linux"
 )
 
-const KernelCmdlineScanner = linux.KernelCmdlineSchemaName
+const KernelCmdlineScanner = "kernelCmdline"
 
 type KernelCmdline struct {
 	id    string
 	group string
+	input interface{}
 }
 
 func (c *KernelCmdline) Name() string {
@@ -24,15 +24,20 @@ func (c *KernelCmdline) Group() string {
 	return c.group
 }
 
-func (c *KernelCmdline) Run(i interface{}) error {
+func (c *KernelCmdline) Input() interface{} {
+	return c.input
+}
+
+func (c *KernelCmdline) Run() error {
 	return nil
 }
 
-func NewKernelCmdline(id string, group string) scanner.Scanner {
+func NewKernelCmdline(id string, group string, input interface{}) (scanner.Scanner, error) {
 	return &KernelCmdline{
 		id:    id,
 		group: group,
-	}
+		input: input,
+	}, nil
 }
 
 func init() {

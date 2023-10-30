@@ -1,15 +1,16 @@
 package linux
 
 import (
+	"fmt"
 	"github.com/mfranczy/compat/pkg/scanner"
-	"github.com/mfranczy/compat/pkg/types/v1/linux"
 )
 
-const KernelDriversScanner = linux.KernelDriversSchemaName
+const KernelDriversScanner = "kernelDrivers"
 
 type KernelDrivers struct {
 	id    string
 	group string
+	input interface{}
 }
 
 func (d *KernelDrivers) Name() string {
@@ -24,15 +25,20 @@ func (d *KernelDrivers) Group() string {
 	return d.group
 }
 
-func (d *KernelDrivers) Run(i interface{}) error {
-	return nil
+func (d *KernelDrivers) Input() interface{} {
+	return d.input
 }
 
-func NewKernelDrivers(id string, group string) scanner.Scanner {
+func (d *KernelDrivers) Run() error {
+	return fmt.Errorf("test")
+}
+
+func NewKernelDrivers(id string, group string, input interface{}) (scanner.Scanner, error) {
 	return &KernelDrivers{
 		id:    id,
 		group: group,
-	}
+		input: input,
+	}, nil
 }
 
 func init() {

@@ -1,53 +1,34 @@
 package linux
 
 import (
-	"github.com/mfranczy/compat/pkg/types/v1/hardware"
-)
-
-const (
-	KernelConfigurationSchemaName = "kernelConfiguration"
-	KernelCmdlineSchemaName       = "kernelCmdline"
-	KernelModulesSchemaName       = "kernelModules"
-	KernelDriversSchemaName       = "kernelDrivers"
+	"encoding/json"
 )
 
 type Schema struct {
-	OneOf map[string]*Configuration `json:"oneof,omitempty"`
-	Configuration
+	OneOf    map[string]Subjects
+	Subjects Subjects
 }
 
-type Configuration struct {
-	Hardware            *hardware.Schema     `json:"hardware,omitempty"`
-	KernelConfiguration *KernelConfiguration `json:"kernelConfiguration,omitempty"`
-	KernelCmdline       *KernelCmdline       `json:"kernelCmdline,omitempty"`
-	KernelModules       *KernelModules       `json:"kernelModules,omitempty"`
-	KernelDrivers       *KernelDrivers       `json:"kernelDrivers,omitempty"`
-}
+type Subjects map[string]interface{}
 
-type KernelConfiguration struct {
-}
-
-func (KernelConfiguration) String() string {
-	return KernelConfigurationSchemaName
-}
-
-type KernelCmdline struct {
-}
-
-func (KernelCmdline) String() string {
-	return KernelCmdlineSchemaName
-}
-
-type KernelModules struct {
-}
-
-func (KernelModules) String() string {
-	return KernelModulesSchemaName
-}
-
-type KernelDrivers struct {
-}
-
-func (KernelDrivers) String() string {
-	return KernelDriversSchemaName
+func (s *Schema) UnmarshalJSON(data []byte) error {
+	md := make(map[string]interface{})
+	err := json.Unmarshal(data, &md)
+	if err != nil {
+		return err
+	}
+	if _, ok := md["oneof"]; ok {
+		s.OneOf = make(map[string]Subjects)
+		for group, id := range md["oneof"].(map[string]interface{}) {
+			if _, ok = s.OneOf[group]; !ok {
+				s.OneOf[group] = make(Subjects)
+			}
+			for subject, input := range id.(map[string]interface{}) {
+				s.OneOf[group][subject] = input
+			}
+		}
+	} else {
+		s.Subjects = md
+	}
+	return nil
 }

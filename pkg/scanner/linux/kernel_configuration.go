@@ -2,14 +2,14 @@ package linux
 
 import (
 	"github.com/mfranczy/compat/pkg/scanner"
-	"github.com/mfranczy/compat/pkg/types/v1/linux"
 )
 
-const KernelConfigurationScanner = linux.KernelConfigurationSchemaName
+const KernelConfigurationScanner = "kernelConfiguration"
 
 type KernelConfiguration struct {
 	id    string
 	group string
+	input interface{}
 }
 
 func (c *KernelConfiguration) Name() string {
@@ -24,15 +24,20 @@ func (c *KernelConfiguration) Group() string {
 	return c.group
 }
 
-func (c *KernelConfiguration) Run(i interface{}) error {
+func (c *KernelConfiguration) Input() interface{} {
+	return c.input
+}
+
+func (c *KernelConfiguration) Run() error {
 	return nil
 }
 
-func NewKernelConfiguration(id string, group string) scanner.Scanner {
+func NewKernelConfiguration(id string, group string, input interface{}) (scanner.Scanner, error) {
 	return &KernelConfiguration{
 		id:    id,
 		group: group,
-	}
+		input: input,
+	}, nil
 }
 
 func init() {

@@ -1,5 +1,7 @@
 package hardware
 
+// TODO: remove
+
 import "strings"
 
 const (

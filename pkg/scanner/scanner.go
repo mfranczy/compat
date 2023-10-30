@@ -1,6 +1,8 @@
 package scanner
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type OS string
 
@@ -18,12 +20,14 @@ type Scanner interface {
 	Name() string
 	ID() string
 	Group() string
-	Run(interface{}) error
+	Input() interface{}
+	Run() error
 }
 
-type Creator func(id string, group string) Scanner
+type Creator func(id string, group string, input interface{}) (Scanner, error)
 type OsScanner map[string]Creator
 
+// TODO: get rid of the struct and provide scanners based on build
 type OsScanners struct {
 	Linux   OsScanner
 	Illumos OsScanner

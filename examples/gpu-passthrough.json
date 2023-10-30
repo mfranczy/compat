@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0.",
+  "schemaVersion": "0.1.0.",
   "linux": {
     "5.15.0": {
       "vfio": {
@@ -65,7 +65,7 @@
             },
             "kernelModules": {
               "kvmgt": {
-                "enable_gvt": 1
+                "enable_gvt": "1"
               }
             }
           }
@@ -74,3 +74,11 @@
     }
   }
 }
+
+
+// TODO:
+// 1. Simplify the tool
+// - remove the parallelism
+// 2. Finish the scanners
+// - implement checks
+// 3. Take the discussion to the working group

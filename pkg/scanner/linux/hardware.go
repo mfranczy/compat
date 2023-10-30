@@ -2,14 +2,14 @@ package linux
 
 import (
 	"github.com/mfranczy/compat/pkg/scanner"
-	"github.com/mfranczy/compat/pkg/types/v1/hardware"
 )
 
-const HardwareScanner = hardware.SchemaName
+const HardwareScanner = "hardware"
 
 type Hardware struct {
 	id    string
 	group string
+	input interface{}
 }
 
 func (h *Hardware) Name() string {
@@ -24,15 +24,20 @@ func (h *Hardware) Group() string {
 	return h.group
 }
 
-func (h *Hardware) Run(i interface{}) error {
+func (h *Hardware) Input() interface{} {
+	return h.input
+}
+
+func (h *Hardware) Run() error {
 	return nil
 }
 
-func NewHardware(id string, group string) scanner.Scanner {
+func NewHardware(id string, group string, input interface{}) (scanner.Scanner, error) {
 	return &Hardware{
 		id:    id,
 		group: group,
-	}
+		input: input,
+	}, nil
 }
 
 func init() {

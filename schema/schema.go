@@ -19,6 +19,7 @@ var Schema string
 
 func LoadSchema(artifact string) (*v1.ImageCompatibilitySchema, error) {
 	s, err := jsonschema.CompileString(CompatibilityURL, Schema)
+
 	if err != nil {
 		return nil, err
 	}
