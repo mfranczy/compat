@@ -14,6 +14,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
+	// TODO: recognize if tool has been executed with root permissions
 	if len(args) < 1 {
 		// TODO: add usage doc
 		fmt.Println("Usage...")

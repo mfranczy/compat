@@ -17,5 +17,5 @@ type Scanner interface {
 	Run(interface{}) error
 }
 
-type Initialized map[string]Scanner
+type Factory map[string]Scanner
 type InitFunc func() (Scanner, error)

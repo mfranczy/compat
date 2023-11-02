@@ -8,7 +8,6 @@ import (
 
 	"compat/pkg/scanner"
 	"compat/pkg/types/v1"
-	"compat/pkg/types/v1/linux"
 )
 
 type GroupStatus string
@@ -20,7 +19,7 @@ const (
 
 type Result map[string]GroupStatus
 
-func RunHostValidation(ic *v1.ImageCompatibilitySchema, sc scanner.Initialized) (Result, error) {
+func RunHostValidation(ic *v1.ImageCompatibilitySchema, sc scanner.Factory) (Result, error) {
 	kernelVersion, err := matchKernelVersion(ic)
 	if err != nil {
 		return nil, err
@@ -48,7 +47,7 @@ func matchKernelVersion(ic *v1.ImageCompatibilitySchema) (string, error) {
 	return "", fmt.Errorf("could not find compatible kernel version")
 }
 
-func validateHost(ic *v1.ImageCompatibilitySchema, kernelVersion string, sc scanner.Initialized) Result {
+func validateHost(ic *v1.ImageCompatibilitySchema, kernelVersion string, sc scanner.Factory) Result {
 	var (
 		res = make(Result)
 		err error
@@ -81,7 +80,7 @@ func validateHost(ic *v1.ImageCompatibilitySchema, kernelVersion string, sc scan
 	return res
 }
 
-func runScanners(subjects linux.Subjects, sc scanner.Initialized) error {
+func runScanners(subjects v1.Subjects, sc scanner.Factory) error {
 	for subject, input := range subjects {
 		if s, ok := sc[subject]; ok {
 			if err := s.Run(input); err != nil {

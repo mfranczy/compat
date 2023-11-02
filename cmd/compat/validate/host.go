@@ -15,7 +15,7 @@ const (
 )
 
 func RunHostCmd(args []string) error {
-	var scanners scanner.Initialized
+	var scanners scanner.Factory
 
 	if len(args) < 1 {
 		return fmt.Errorf("image compatibility schema file path is required")

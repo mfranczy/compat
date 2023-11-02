@@ -22,7 +22,7 @@ func (c *KernelConfiguration) Name() string {
 }
 
 func (c *KernelConfiguration) Run(i interface{}) error {
-	input, err := c.convertInput(i)
+	input, err := scanner.ConvertInputToMap(i)
 	if err != nil {
 		return err
 	}
@@ -37,24 +37,6 @@ func (c *KernelConfiguration) Run(i interface{}) error {
 		return fmt.Errorf("not all kernel configuration options are matched")
 	}
 	return nil
-}
-
-func (c *KernelConfiguration) convertInput(i interface{}) (map[string]string, error) {
-	input := make(map[string]string)
-	data, ok := i.(map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("invalid input")
-	}
-
-	for k, iv := range data {
-		v, ok := iv.(string)
-		if !ok {
-			return nil, fmt.Errorf("invalid input")
-		}
-		input[k] = v
-	}
-
-	return input, nil
 }
 
 func NewKernelConfiguration() (scanner.Scanner, error) {
