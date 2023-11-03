@@ -1,0 +1,83 @@
+{
+  "$id": "https://opencontainers.org/schema/image-compatibility",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OCI Image Compatibility schema",
+  "description": "Image Compatibility specification for container images",
+  "type": "object",
+  "required": ["schemaVersion"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "linux": {
+      "additionalProperties": false,
+      "type": "object",
+      "patternProperties": {
+        ".{1,}": {
+          "type": "object",
+          "patternProperties": {
+            ".{1,}": {
+              "oneOf": [
+                {"$ref": "#/$defs/linuxConfiguration"},
+                {"$ref": "#/$defs/selectOneOf"}
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hardwareConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cpu": {
+          "type": "array"
+        },
+        "pci": {
+          "type": "array"
+        },
+        "usb": {
+          "type": "array"
+        }
+      }
+    },
+    "linuxConfiguration": {
+      "type": "object",
+      "properties": {
+        "hardware": {
+          "$ref": "#/$defs/hardwareConfiguration"
+        },
+        "kernelConfiguration": {
+          "type": "object"
+        },
+        "kernelModules": {
+          "type": "object"
+        },
+        "kernelCmdline": {
+          "type": "object"
+        },
+        "kernelDrivers": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "selectOneOf": {
+      "type": "object",
+      "properties": {
+        "oneof": {
+          "type": "object",
+          "patternProperties": {
+            ".{1,}": {
+              "$ref": "#/$defs/linuxConfiguration"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
