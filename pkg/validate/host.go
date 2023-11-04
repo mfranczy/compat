@@ -59,7 +59,7 @@ func validateHost(ic *v1.ImageCompatibilitySchema, kernelVersion string, sc scan
 			failedSubGroupsCnt := 0
 
 			for _, subjects := range schema.OneOf {
-				if err = runScanners(subjects, sc); err != nil {
+				if err = runScanners(group, subjects, sc); err != nil {
 					failedSubGroupsCnt++
 				}
 			}
@@ -69,7 +69,7 @@ func validateHost(ic *v1.ImageCompatibilitySchema, kernelVersion string, sc scan
 				res[group] = GroupSucceeded
 			}
 		} else {
-			if err = runScanners(schema.Subjects, sc); err != nil {
+			if err = runScanners(group, schema.Subjects, sc); err != nil {
 				res[group] = GroupFailed
 			} else {
 				res[group] = GroupSucceeded
@@ -80,7 +80,9 @@ func validateHost(ic *v1.ImageCompatibilitySchema, kernelVersion string, sc scan
 	return res
 }
 
-func runScanners(subjects v1.Subjects, sc scanner.Factory) error {
+func runScanners(group string, subjects v1.Subjects, sc scanner.Factory) error {
+	defer scanner.RecoverArgsPanic(group)
+
 	for subject, input := range subjects {
 		if s, ok := sc[subject]; ok {
 			if err := s.Run(input); err != nil {

@@ -87,9 +87,7 @@ func initModules() error {
 	return nil
 }
 
-type KernelModules struct {
-	Data map[string]Module
-}
+type KernelModules struct{}
 
 func (m *KernelModules) Name() string {
 	return KernelModulesScanner
@@ -128,15 +126,23 @@ func NewKernelModules() (scanner.Scanner, error) {
 	return &KernelModules{}, nil
 }
 
-type KernelDrivers struct {
-	Data map[string]Module
-}
+type KernelDrivers struct{}
 
 func (m *KernelDrivers) Name() string {
 	return KernelDriversScanner
 }
 
 func (m *KernelDrivers) Run(i interface{}) error {
+	var input scanner.DynamicMap = i.(map[string]interface{})
+
+	for module := range input {
+		if modules[module]
+		for version := range input.Map(module) {
+			for param := range input.Map(module).Map(version) {
+				fmt.Println(module, version, param)
+			}
+		}
+	}
 	return nil
 }
 

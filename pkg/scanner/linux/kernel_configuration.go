@@ -22,14 +22,11 @@ func (c *KernelConfiguration) Name() string {
 }
 
 func (c *KernelConfiguration) Run(i interface{}) error {
-	input, err := scanner.ConvertInputToMap(i)
-	if err != nil {
-		return err
-	}
+	var input scanner.DynamicMap = i.(map[string]interface{})
 
 	matchCnt := 0
-	for k, exVal := range input {
-		if val, ok := c.Data[k]; ok && exVal == val {
+	for config := range input {
+		if val, ok := c.Data[config]; ok && input.Val(config) == val {
 			matchCnt++
 		}
 	}

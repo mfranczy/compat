@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0.",
   "linux": {
-    "5.15.0": {
+    "*": { // regex for uname -r
       "vfio": {
         "kernelConfiguration": {
           "CONFIG_VFIO": "m",
@@ -43,11 +43,6 @@
               "CONFIG_MODULE_UNLOAD": "y",
               "CONFIG_PCI_MMCONFIG": "y",
               "CONFIG_DRM_NOUVEAU": "n"
-            },
-            "kernelDrivers": {
-              "cuda-drivers": {
-                "510.54": {}
-              }
             }
           },
           "intel": {

@@ -19,14 +19,15 @@ func (c *KernelCmdline) Name() string {
 }
 
 func (c *KernelCmdline) Run(i interface{}) error {
-	input, err := scanner.ConvertInputToMap(i)
-	if err != nil {
-		return err
+	var input scanner.DynamicMap = i.(map[string]interface{})
+
+	for param := range input {
+		input.Val(param)
 	}
 
 	matchCnt := 0
-	for k, exVal := range input {
-		if val, ok := c.Data[k]; ok && exVal == val {
+	for param := range input {
+		if val, ok := c.Data[param]; ok && input.Val(param) == val {
 			matchCnt++
 		}
 	}
@@ -53,11 +54,11 @@ func loadBootData() (map[string]string, error) {
 		return nil, err
 	}
 
-	args := strings.Split(string(rawData), " ")
+	args := strings.Split(strings.TrimSpace(string(rawData)), " ")
 	for _, arg := range args {
 		d := strings.Split(arg, "=")
 		if len(d) > 1 {
-			data[d[0]] = strings.TrimSpace(d[1])
+			data[d[0]] = d[1]
 		} else {
 			data[d[0]] = ""
 		}
